@@ -138,7 +138,7 @@ function AnalyzePage() {
           <section className="min-w-0">
             {status === "idle" && <AnalysisEmptyState />}
             {status === "loading" && (
-              <AnalysisLoading message={LOADING_MESSAGES[messageIndex]} />
+              <AnalysisLoading message={LOADING_MESSAGES[messageIndex] ?? ""} />
             )}
             {status === "done" && (
               <AnalysisTabs level={level} originalCode={analyzedCode} />
