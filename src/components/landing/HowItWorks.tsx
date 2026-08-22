@@ -62,12 +62,12 @@ export function HowItWorks() {
               </div>
               {i < STEPS.length - 1 && (
                 <div
-                  key={`c-${step.n}`}
                   className="hidden self-center lg:block lg:h-0.5 lg:w-14 connector-line"
                   aria-hidden
                 />
               )}
-            </>
+            </Fragment>
+
           ))}
         </div>
       </div>
