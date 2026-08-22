@@ -1,4 +1,6 @@
+import { Fragment } from "react";
 import { LEVELS } from "@/lib/analysis-data";
+
 
 const STEPS = [
   {
@@ -36,8 +38,9 @@ export function HowItWorks() {
 
         <div className="mt-12 grid items-stretch gap-6 lg:grid-cols-[1fr_auto_1fr_auto_1fr]">
           {STEPS.map((step, i) => (
-            <>
-              <div key={step.n} className="panel glow-hover p-6">
+            <Fragment key={step.n}>
+              <div className="panel glow-hover p-6">
+
                 <span className="font-mono text-xs text-primary">{step.n}</span>
                 <h3 className="mt-3 text-lg font-semibold">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
