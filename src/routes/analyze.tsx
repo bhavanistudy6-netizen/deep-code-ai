@@ -27,7 +27,7 @@ export const Route = createFileRoute("/analyze")({
       { property: "og:description", content: DESCRIPTION },
     ],
   }),
-  component: AnalyzePage;
+  component: AnalyzePage,
 });
 
 function AnalyzePage() {
