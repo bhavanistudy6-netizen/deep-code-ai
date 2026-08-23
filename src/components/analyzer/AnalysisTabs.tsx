@@ -471,17 +471,20 @@ export function AnalysisTabs({
 
 export function AnalysisEmptyState() {
   return (
-    <div className="panel flex min-h-[420px] flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="grid size-16 place-items-center rounded-2xl border border-border bg-surface-2">
+    <div className="panel gradient-border grid-bg flex min-h-[420px] flex-col items-center justify-center px-6 py-16 text-center">
+      <span className="animate-float grid size-16 place-items-center rounded-2xl border border-primary/25 bg-surface-2 shadow-[0_18px_44px_-24px_var(--brand)]">
         <Sparkles className="size-7 text-primary" />
       </span>
-      <h3 className="mt-5 text-lg font-semibold">Ready to analyze your code</h3>
+      <h3 className="mt-6 text-lg font-semibold tracking-tight">
+        Ready to analyze your code
+      </h3>
       <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
         Paste your code and click Analyze My Code.
       </p>
     </div>
   );
 }
+
 
 export function AnalysisLoading({ message }: { message: string }) {
   return (
