@@ -483,25 +483,29 @@ export function AnalysisEmptyState() {
 
 export function AnalysisLoading({ message }: { message: string }) {
   return (
-    <div className="panel min-h-[420px] p-6">
+    <div className="panel gradient-border min-h-[420px] p-6">
       <div className="flex items-center gap-3">
-        <span className="size-2.5 animate-pulse rounded-full bg-gradient-brand" />
-        <p key={message} className="animate-rise text-sm font-medium">
+        <span className="relative grid size-2.5 place-items-center">
+          <span className="absolute size-full animate-ping rounded-full bg-primary/50" />
+          <span className="size-2.5 rounded-full bg-gradient-brand" />
+        </span>
+        <p key={message} className="animate-rise text-sm font-medium tracking-tight">
           {message}
         </p>
       </div>
       <div className="mt-4 h-1 overflow-hidden rounded-full bg-surface-2">
-        <div className="h-full w-1/3 animate-pulse rounded-full bg-gradient-brand" />
+        <div className="progress-indeterminate h-full w-full rounded-full bg-gradient-brand" />
       </div>
-      <div className="mt-6 space-y-3">
+      <div className="mt-7 space-y-3">
         {[80, 100, 65, 92, 45, 100, 70].map((w, i) => (
           <div
             key={i}
-            className="h-10 animate-pulse rounded-lg bg-surface-2/70"
-            style={{ width: `${w}%`, animationDelay: `${i * 90}ms` }}
+            className="skeleton h-10 animate-rise"
+            style={{ width: `${w}%`, animationDelay: `${i * 70}ms` }}
           />
         ))}
       </div>
     </div>
   );
 }
+
