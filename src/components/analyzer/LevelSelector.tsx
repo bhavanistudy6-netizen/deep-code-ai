@@ -11,8 +11,10 @@ export function LevelSelector({
 }) {
   return (
     <section>
-      <h2 className="text-sm font-semibold text-foreground">Explain this code as...</h2>
-      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+      <h2 className="text-sm font-semibold tracking-tight text-foreground">
+        Explain this code as...
+      </h2>
+      <div className="mt-3.5 grid gap-3 sm:grid-cols-2">
         {LEVELS.map((level) => {
           const active = level.id === value;
           return (
@@ -22,17 +24,18 @@ export function LevelSelector({
               aria-pressed={active}
               onClick={() => onChange(level.id)}
               className={cn(
-                "panel relative cursor-pointer p-4 text-left transition-all hover:-translate-y-0.5",
+                "panel panel-hover relative cursor-pointer p-4 text-left",
                 active
-                  ? "border-primary/60 bg-primary/10 shadow-[0_16px_40px_-24px_var(--brand)]"
-                  : "hover:border-primary/30",
+                  ? "border-primary/60 bg-primary/[0.08] shadow-[0_18px_44px_-26px_var(--brand)]"
+                  : "",
               )}
             >
               {active && (
-                <span className="absolute right-3 top-3 grid size-5 place-items-center rounded-full bg-gradient-brand">
+                <span className="absolute right-3 top-3 grid size-5 place-items-center rounded-full bg-gradient-brand shadow-[0_6px_16px_-6px_var(--brand)]">
                   <Check className="size-3 text-primary-foreground" />
                 </span>
               )}
+
               <p className="text-sm font-semibold">
                 <span className="mr-2">{level.emoji}</span>
                 {level.label}
