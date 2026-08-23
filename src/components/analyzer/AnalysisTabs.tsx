@@ -20,17 +20,7 @@ import {
 import { CodeBlock } from "@/components/CodeBlock";
 import { CopyButton } from "@/components/analyzer/CopyButton";
 import { cn } from "@/lib/utils";
-import {
-  BUGS,
-  COMPLEXITY,
-  EXPLANATIONS,
-  IMPROVED_CODE,
-  IMPROVEMENTS,
-  INTERVIEW_QUESTIONS,
-  SCORES,
-  SMELLS,
-  type Level,
-} from "@/lib/analysis-data";
+import type { AnalysisResult } from "@/lib/analysis-engine";
 
 const TABS = [
   "Overview",
@@ -93,23 +83,22 @@ function SectionCard({
 }
 
 
-function OverviewTab() {
+function OverviewTab({ result }: { result: AnalysisResult }) {
   return (
     <div className="space-y-4">
       <SectionCard className="flex flex-col items-center gap-6 sm:flex-row">
-        <ScoreRing score={SCORES.overall} />
+        <ScoreRing score={result.overall} />
         <div className="min-w-0 text-center sm:text-left">
           <p className="text-sm text-muted-foreground">Code Quality Score</p>
-          <p className="mt-1 text-xl font-semibold">Works correctly, scales poorly</p>
+          <p className="mt-1 text-xl font-semibold">{result.verdict}</p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            The logic is right and easy to read, but the quadratic scan is the single
-            biggest thing holding this function back.
+            {result.summary}
           </p>
         </div>
       </SectionCard>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {SCORES.metrics.map((metric) => (
+        {result.metrics.map((metric) => (
           <div key={metric.label} className="panel p-4">
             <p className="truncate text-xs text-muted-foreground">{metric.label}</p>
             <p className="mt-1 font-mono text-xl font-semibold">
@@ -129,7 +118,7 @@ function OverviewTab() {
       <div className="grid gap-3 lg:grid-cols-2">
         <SectionCard title="Strengths">
           <ul className="mt-3 space-y-2.5 text-sm">
-            {SCORES.strengths.map((item) => (
+            {result.strengths.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <Check className="mt-0.5 size-4 shrink-0 text-success" />
                 <span className="text-foreground/90">{item}</span>
@@ -139,7 +128,7 @@ function OverviewTab() {
         </SectionCard>
         <SectionCard title="Improvements">
           <ul className="mt-3 space-y-2.5 text-sm">
-            {SCORES.improvements.map((item) => (
+            {result.improvements.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <TriangleAlert className="mt-0.5 size-4 shrink-0 text-warning" />
                 <span className="text-foreground/90">{item}</span>
@@ -152,13 +141,13 @@ function OverviewTab() {
   );
 }
 
-function ExplanationTab({ level }: { level: Level }) {
+function ExplanationTab({ result }: { result: AnalysisResult }) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
     <div className="space-y-3">
-      {EXPLANATIONS.map((item, i) => (
-        <div key={item.line} className="panel overflow-hidden">
+      {result.explanations.map((item, i) => (
+        <div key={item.line + i} className="panel overflow-hidden">
           <div className="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
             <Badge variant="secondary" className="font-mono text-xs">
               {item.line}
@@ -169,7 +158,7 @@ function ExplanationTab({ level }: { level: Level }) {
           </div>
           <div className="p-4">
             <p className="text-sm leading-relaxed text-foreground/90">
-              {item.text[level]}
+              {item.text}
             </p>
             <button
               type="button"
@@ -183,7 +172,7 @@ function ExplanationTab({ level }: { level: Level }) {
             </button>
             {open === i && (
               <p className="mt-3 animate-rise rounded-lg border border-border bg-surface-2/60 p-3 text-sm leading-relaxed text-muted-foreground">
-                {item.why[level]}
+                {item.why}
               </p>
             )}
           </div>
@@ -193,7 +182,8 @@ function ExplanationTab({ level }: { level: Level }) {
   );
 }
 
-function ComplexityTab() {
+function ComplexityTab({ result }: { result: AnalysisResult }) {
+  const COMPLEXITY = result.complexity;
   return (
     <div className="space-y-4">
       <div className="grid gap-3 lg:grid-cols-2">
@@ -259,7 +249,8 @@ const SEVERITY_STYLE = {
   LOW: "border-brand-2/40 bg-brand-2/15 text-brand-2",
 };
 
-function BugsTab() {
+function BugsTab({ result }: { result: AnalysisResult }) {
+  const BUGS = result.bugs;
   return (
     <div className="space-y-3">
       {BUGS.map((bug) => (
@@ -291,7 +282,8 @@ function BugsTab() {
   );
 }
 
-function SmellsTab() {
+function SmellsTab({ result }: { result: AnalysisResult }) {
+  const SMELLS = result.smells;
   return (
     <div className="grid gap-3 lg:grid-cols-2">
       {SMELLS.map((smell) => (
@@ -311,7 +303,9 @@ function SmellsTab() {
   );
 }
 
-function ImprovedCodeTab({ originalCode }: { originalCode: string }) {
+function ImprovedCodeTab({ originalCode, result }: { originalCode: string; result: AnalysisResult }) {
+  const IMPROVED_CODE = result.improvedCode;
+  const IMPROVEMENTS = result.improvementsMade;
   const [compare, setCompare] = useState(false);
 
   return (
@@ -319,7 +313,7 @@ function ImprovedCodeTab({ originalCode }: { originalCode: string }) {
       <div className="panel overflow-hidden">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-3">
           <p className="min-w-0 truncate font-mono text-xs text-muted-foreground">
-            findDuplicate.optimized.js
+            {result.fileName}
           </p>
           <div className="flex items-center gap-2">
             <CopyButton value={IMPROVED_CODE} />
@@ -351,13 +345,13 @@ function ImprovedCodeTab({ originalCode }: { originalCode: string }) {
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="panel overflow-hidden">
               <p className="border-b border-border px-4 py-2.5 font-mono text-xs text-muted-foreground">
-                Original — O(n²)
+                Original — {result.complexity.time.value}
               </p>
               <CodeBlock code={originalCode} compact />
             </div>
             <div className="panel overflow-hidden border-primary/30">
               <p className="border-b border-border px-4 py-2.5 font-mono text-xs text-primary">
-                Improved — O(n)
+                Improved — optimised
               </p>
               <CodeBlock code={IMPROVED_CODE} compact />
             </div>
@@ -368,7 +362,8 @@ function ImprovedCodeTab({ originalCode }: { originalCode: string }) {
   );
 }
 
-function InterviewTab() {
+function InterviewTab({ result }: { result: AnalysisResult }) {
+  const INTERVIEW_QUESTIONS = result.interviewQuestions;
   const [open, setOpen] = useState<number | null>(0);
 
   return (
@@ -419,14 +414,14 @@ function InterviewTab() {
 }
 
 export function AnalysisTabs({
-  level,
+  result,
   originalCode,
 }: {
-  level: Level;
+  result: AnalysisResult;
   originalCode: string;
 }) {
   return (
-    <Tabs defaultValue="Overview" className="animate-rise">
+    <Tabs key={result.level + result.language} defaultValue="Overview" className="animate-rise">
       <div className="-mx-1 overflow-x-auto px-1 pb-1">
         <TabsList className="h-auto w-max gap-1 rounded-xl border border-border bg-surface-2/50 p-1 shadow-[0_1px_0_0_oklch(1_0_0/5%)_inset]">
           {TABS.map((tab) => (
@@ -444,25 +439,25 @@ export function AnalysisTabs({
       <div className="mt-5">
 
         <TabsContent value="Overview">
-          <OverviewTab />
+          <OverviewTab result={result} />
         </TabsContent>
         <TabsContent value="Explanation">
-          <ExplanationTab level={level} />
+          <ExplanationTab result={result} />
         </TabsContent>
         <TabsContent value="Complexity">
-          <ComplexityTab />
+          <ComplexityTab result={result} />
         </TabsContent>
         <TabsContent value="Bugs">
-          <BugsTab />
+          <BugsTab result={result} />
         </TabsContent>
         <TabsContent value="Code Smells">
-          <SmellsTab />
+          <SmellsTab result={result} />
         </TabsContent>
         <TabsContent value="Improved Code">
-          <ImprovedCodeTab originalCode={originalCode} />
+          <ImprovedCodeTab originalCode={originalCode} result={result} />
         </TabsContent>
         <TabsContent value="Interview Mode">
-          <InterviewTab />
+          <InterviewTab result={result} />
         </TabsContent>
       </div>
     </Tabs>
