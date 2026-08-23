@@ -85,12 +85,13 @@ function SectionCard({
   className?: string;
 }) {
   return (
-    <div className={cn("panel p-5", className)}>
-      {title && <h3 className="text-sm font-semibold">{title}</h3>}
+    <div className={cn("panel panel-hover p-5", className)}>
+      {title && <h3 className="text-sm font-semibold tracking-tight">{title}</h3>}
       {children}
     </div>
   );
 }
+
 
 function OverviewTab() {
   return (
