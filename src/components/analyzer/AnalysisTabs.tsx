@@ -85,12 +85,13 @@ function SectionCard({
   className?: string;
 }) {
   return (
-    <div className={cn("panel p-5", className)}>
-      {title && <h3 className="text-sm font-semibold">{title}</h3>}
+    <div className={cn("panel panel-hover p-5", className)}>
+      {title && <h3 className="text-sm font-semibold tracking-tight">{title}</h3>}
       {children}
     </div>
   );
 }
+
 
 function OverviewTab() {
   return (
@@ -427,12 +428,12 @@ export function AnalysisTabs({
   return (
     <Tabs defaultValue="Overview" className="animate-rise">
       <div className="-mx-1 overflow-x-auto px-1 pb-1">
-        <TabsList className="h-auto w-max gap-1 border border-border bg-surface-2/60 p-1">
+        <TabsList className="h-auto w-max gap-1 rounded-xl border border-border bg-surface-2/50 p-1 shadow-[0_1px_0_0_oklch(1_0_0/5%)_inset]">
           {TABS.map((tab) => (
             <TabsTrigger
               key={tab}
               value={tab}
-              className="cursor-pointer rounded-lg px-3 py-1.5 text-xs data-[state=active]:bg-gradient-brand data-[state=active]:text-primary-foreground"
+              className="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium tracking-tight text-muted-foreground transition-all duration-200 hover:text-foreground data-[state=active]:bg-gradient-brand data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_8px_20px_-10px_var(--brand)]"
             >
               {tab}
             </TabsTrigger>
@@ -440,7 +441,8 @@ export function AnalysisTabs({
         </TabsList>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-5">
+
         <TabsContent value="Overview">
           <OverviewTab />
         </TabsContent>
@@ -469,11 +471,13 @@ export function AnalysisTabs({
 
 export function AnalysisEmptyState() {
   return (
-    <div className="panel flex min-h-[420px] flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="grid size-16 place-items-center rounded-2xl border border-border bg-surface-2">
+    <div className="panel gradient-border grid-bg flex min-h-[420px] flex-col items-center justify-center px-6 py-16 text-center">
+      <span className="animate-float grid size-16 place-items-center rounded-2xl border border-primary/25 bg-surface-2 shadow-[0_18px_44px_-24px_var(--brand)]">
         <Sparkles className="size-7 text-primary" />
       </span>
-      <h3 className="mt-5 text-lg font-semibold">Ready to analyze your code</h3>
+      <h3 className="mt-6 text-lg font-semibold tracking-tight">
+        Ready to analyze your code
+      </h3>
       <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
         Paste your code and click Analyze My Code.
       </p>
@@ -481,27 +485,32 @@ export function AnalysisEmptyState() {
   );
 }
 
+
 export function AnalysisLoading({ message }: { message: string }) {
   return (
-    <div className="panel min-h-[420px] p-6">
+    <div className="panel gradient-border min-h-[420px] p-6">
       <div className="flex items-center gap-3">
-        <span className="size-2.5 animate-pulse rounded-full bg-gradient-brand" />
-        <p key={message} className="animate-rise text-sm font-medium">
+        <span className="relative grid size-2.5 place-items-center">
+          <span className="absolute size-full animate-ping rounded-full bg-primary/50" />
+          <span className="size-2.5 rounded-full bg-gradient-brand" />
+        </span>
+        <p key={message} className="animate-rise text-sm font-medium tracking-tight">
           {message}
         </p>
       </div>
       <div className="mt-4 h-1 overflow-hidden rounded-full bg-surface-2">
-        <div className="h-full w-1/3 animate-pulse rounded-full bg-gradient-brand" />
+        <div className="progress-indeterminate h-full w-full rounded-full bg-gradient-brand" />
       </div>
-      <div className="mt-6 space-y-3">
+      <div className="mt-7 space-y-3">
         {[80, 100, 65, 92, 45, 100, 70].map((w, i) => (
           <div
             key={i}
-            className="h-10 animate-pulse rounded-lg bg-surface-2/70"
-            style={{ width: `${w}%`, animationDelay: `${i * 90}ms` }}
+            className="skeleton h-10 animate-rise"
+            style={{ width: `${w}%`, animationDelay: `${i * 70}ms` }}
           />
         ))}
       </div>
     </div>
   );
 }
+
