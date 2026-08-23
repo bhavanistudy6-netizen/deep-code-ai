@@ -226,3 +226,153 @@
 @utility animate-rise {
   animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* ---------- Polish pass: typography, scrollbars, skeletons, borders ---------- */
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--brand) 70%, transparent);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--brand) 40%, transparent) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--surface-2) 90%, white 10%);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--brand) 55%, var(--surface-2));
+    background-clip: content-box;
+  }
+}
+
+@keyframes shimmer-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@utility skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--surface-2) 70%, transparent);
+  border-radius: var(--radius-md);
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--brand) 16%, transparent),
+      transparent
+    );
+    animation: shimmer-sweep 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%) scaleX(0.4);
+  }
+  50% {
+    transform: translateX(20%) scaleX(0.75);
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.4);
+  }
+}
+
+@utility progress-indeterminate {
+  transform-origin: left center;
+  animation: indeterminate 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@utility gradient-border {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--brand) 55%, transparent),
+      transparent 45%,
+      color-mix(in oklab, var(--brand-2) 40%, transparent)
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+@utility sheen {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    left: -50%;
+    background: linear-gradient(90deg, transparent, oklch(1 0 0 / 18%), transparent);
+    transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  &:hover::after {
+    left: 120%;
+  }
+}
+
+@utility panel-hover {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--brand) 34%, transparent);
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 8%) inset,
+      0 22px 48px -30px color-mix(in oklab, var(--brand) 65%, transparent);
+  }
+}
+
+@utility gutter-rule {
+  box-shadow: inset 43px 0 0 -42px var(--border);
+}
