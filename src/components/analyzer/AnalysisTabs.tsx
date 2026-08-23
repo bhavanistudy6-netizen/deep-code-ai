@@ -427,12 +427,12 @@ export function AnalysisTabs({
   return (
     <Tabs defaultValue="Overview" className="animate-rise">
       <div className="-mx-1 overflow-x-auto px-1 pb-1">
-        <TabsList className="h-auto w-max gap-1 border border-border bg-surface-2/60 p-1">
+        <TabsList className="h-auto w-max gap-1 rounded-xl border border-border bg-surface-2/50 p-1 shadow-[0_1px_0_0_oklch(1_0_0/5%)_inset]">
           {TABS.map((tab) => (
             <TabsTrigger
               key={tab}
               value={tab}
-              className="cursor-pointer rounded-lg px-3 py-1.5 text-xs data-[state=active]:bg-gradient-brand data-[state=active]:text-primary-foreground"
+              className="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium tracking-tight text-muted-foreground transition-all duration-200 hover:text-foreground data-[state=active]:bg-gradient-brand data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_8px_20px_-10px_var(--brand)]"
             >
               {tab}
             </TabsTrigger>
@@ -440,7 +440,8 @@ export function AnalysisTabs({
         </TabsList>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-5">
+
         <TabsContent value="Overview">
           <OverviewTab />
         </TabsContent>
